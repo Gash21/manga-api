@@ -1,7 +1,7 @@
 const axios = require("axios").default;
 const tunnel = require("tunnel");
 const {
-  baseUrl,
+  localUrl
 } = require("../constants/urls");
 const axiosCookieJarSupport = require("axios-cookiejar-support").default;
 const tough = require("tough-cookie");
@@ -13,11 +13,11 @@ const tunnelAgent = tunnel.httpsOverHttp({
     port: 8080,
   },
 });
-axios.defaults.baseURL = baseUrl;
+axios.defaults.baseURL = localUrl;
 // axios.defaults.httpsAgent = tunnelAgent;
 axios.defaults.jar = cookiejar;
 
-const AxiosService = async (url) => {
+const AxiosServiceLocal = async (url) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.get(url);
@@ -30,4 +30,4 @@ const AxiosService = async (url) => {
     }
   });
 };
-module.exports = AxiosService;
+module.exports = AxiosServiceLocal;

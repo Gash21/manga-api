@@ -3,6 +3,37 @@ const cheerio = require("cheerio");
 const baseUrl = require("../constants/urls");
 const replaceMangaPage = "https://komiku.co.id/manga/";
 const AxiosService = require("../helpers/axiosService");
+const AxiosServiceLocal = require("../helpers/axiosServiceLocal");
+
+router.get("/manga/all", async (req, res) => {
+  let stop = false,
+    count = 1;
+  while (!stop) {
+    try {
+      const response = await AxiosServiceLocal(`manga/page/${count}`)
+      console.log(count)
+      if (count == 5) {
+        stop = true;
+        break;
+      }
+      count++
+    } catch (err) {
+      console.log(err)
+      stop = true
+      res.send({
+        status: false,
+        message: err,
+        manga_list: []
+      });
+    }
+  }
+  if (stop) {
+    return res.status(200).json({
+      status: true,
+      message: `success get all ${count} pages`,
+    });
+  }
+});
 
 // manga popular ----Ignore this for now --------
 router.get("/manga/popular", async (req, res) => {
